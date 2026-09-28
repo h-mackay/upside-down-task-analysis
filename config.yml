@@ -1,0 +1,72 @@
+default:
+
+  # Paths ----
+  raw:
+    et_processed: "data/raw/et_processed"
+    eprime_clean: "data/raw/eprime_clean"
+
+  paths:
+    derivatives: "data/derivatives"
+    trial_data: "data/derivatives/trial_data.rds"
+    et_data: "data/derivatives/et_data.rds"
+    behav_data: "data/derivatives/behav_data.rds"
+    out_figures: "outputs/figures"
+    out_tables: "outputs/tables"
+    out_diagnostics: "outputs/diagnostics"
+    run_log: "outputs/run_log.txt"
+
+  # Alignment ----
+  # Target display duration band; used by audit only
+  timing:
+    targ_dur_min: 2500
+    targ_dur_max: 2650
+
+  # Test presentations filed under target; moved back by repair_misfiled()
+  boundary_misfiles:
+    - {participant_id: "P5", change_type: "saturation", media: "UMS4", start_ms: 516940, position: "inverted"}
+    - {participant_id: "P11", change_type: "orientation", media: "BO5", start_ms: 21528, position: "upright"}
+    - {participant_id: "P16", change_type: "orientation", media: "CO4", start_ms: 260063, position: "upright"}
+    - {participant_id: "P19", change_type: "orientation", media: "HO1", start_ms: 499464, position: "upright"}
+
+  # Factor levels ----
+  factors:
+    object: ["mug", "banana", "chess", "hammer"]
+    position: ["upright", "inverted"]
+    change_type: ["orientation", "saturation"]
+    phase: ["target", "test"]
+    aoi: ["top", "bottom"]
+
+  # Dependent variables ----
+  dvs_aoi:  # aoi as a factor (top vs bottom)
+    - {name: "n_fix", label: "Fixation count"}
+    - {name: "n_sacc", label: "Saccade count"}
+    - {name: "dwell_ms", label: "Dwell time (ms)"}
+    - {name: "fix_dur_ms", label: "Mean fixation duration (ms)"}
+    - {name: "tff_ms", label: "Time to first fixation (ms)"}
+    - {name: "log_tff_ms", label: "Time to first fixation (log ms)"}
+
+  dvs_prop:  # top / (top + bottom); no aoi factor
+    - {name: "prop_top_dwell", label: "Proportion of dwell time (Top)"}
+    - {name: "prop_top_fix", label: "Proportion of fixations (Top)"}
+    - {name: "prop_top_sacc", label: "Proportion of saccades (Top)"}
+
+  dvs_behav:
+    - {name: "accuracy", label: "Accuracy (proportion correct)"}
+    - {name: "rt", label: "Reaction time, correct trials (ms)"}
+    - {name: "ies", label: "Inverse efficiency (ms)"}
+
+  # Exclusions (per analysis) ----
+  exclusions:
+    behavioural: ["P15"]  # no behavioural responses
+    eyetracking: ["P9", "P15", "P17"]  # P9, P17 bad eye-tracking; P15 as behavioural
+    correlation: ["P9", "P15", "P17"]  # needs valid behavioural + eye-tracking
+
+  # ANOVA ----
+  anova:
+    type: 3
+    sphericity_correction: "GG"  # Greenhouse-Geisser
+    es: "pes"  # partial eta squared
+  alpha: 0.05
+
+  # Reproducibility ----
+  seed: 4100  # jitter in the points figures
